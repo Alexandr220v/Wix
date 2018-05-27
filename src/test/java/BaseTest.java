@@ -12,8 +12,8 @@ public class BaseTest {
 
     private final Properties config = PropertyUtils.loadProperties("config.properties");
     protected static final Logger LOGGER = Logger.getLogger(BaseTest.class);
-    private static final long PAGE_LOAD_TIMEOUT = 10;
-    private static final long TIMEOUT = 10;
+    private static final long PAGE_LOAD_TIMEOUT = 30;
+    private static final long TIMEOUT = 20;
     protected WebDriver driver;
     public final String BASE_URL = "https://kolesniknikolai92.wixsite.com/" + "automation-ait";
     @BeforeMethod(alwaysRun = true)
@@ -25,6 +25,7 @@ public class BaseTest {
             driver.manage().timeouts().pageLoadTimeout(PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
             driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS);
             driver.manage().window().maximize();
+            LOGGER.info("Navigating to url: " + BASE_URL);
             driver.get(BASE_URL);
         } catch (Exception e) {
             LOGGER.info("Error initializing chrome driver");

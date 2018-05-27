@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import ui.table.ProductListTable;
 import utils.Wait;
 
 public class HomePage {
@@ -30,6 +31,7 @@ public class HomePage {
         LOGGER.info("Clicking on shop button...");
         shop.click();
         Wait.waitUntilAnjularRequestFinished(driver);
+        Wait.waitFotAjaxIsFinished(driver);
     }
 
     public WebElement getMailTo() {

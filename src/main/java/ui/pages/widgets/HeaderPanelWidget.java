@@ -28,8 +28,9 @@ public class HeaderPanelWidget {
 
     public HeaderPanelWidget(WebDriver driver) {
         this.driver= driver;
-        driver.switchTo().defaultContent();
         PageFactory.initElements(driver,this);
+        Wait.waitFotAjaxIsFinished(driver);
+        Wait.waitUntilAnjularRequestFinished(driver);
     }
 
 

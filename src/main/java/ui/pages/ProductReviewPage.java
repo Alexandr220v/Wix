@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import utils.FrameUtil;
 import utils.Wait;
 
 public class ProductReviewPage {
@@ -15,15 +16,15 @@ public class ProductReviewPage {
     @FindBy(xpath = "//*[@data-hook='add-to-cart']")
     private WebElement addToCart;
     private WebElement frame;
-    private String frameLocator = "//iframe[contains(@src,'https://ecom.wix.com/storefront/product/i-m-a-product')]";
+    private String frameLocator = "//iframe[contains(@src,'/storefront/product/i-m-a-product')]";
 
     public ProductReviewPage(WebDriver driver) {
         this.driver = driver;
         driver.switchTo().defaultContent();
         frame = driver.findElement(By.xpath(frameLocator));
-        driver.switchTo().frame(frame);
-        Wait.waitUntilAnjularRequestFinished(driver);
+        FrameUtil.swithcToFrame(driver,frame);
         PageFactory.initElements(driver, this);
+        Wait.waitUntilAnjularRequestFinished(driver);
     }
 
     public void addItemToCart() {

@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import utils.FrameUtil;
 import utils.Wait;
 
 import java.util.List;
@@ -19,64 +20,45 @@ public class ProductListTable {
     @FindBy(xpath = "//div[@class='gallery']")
     private WebElement parent;
     private WebElement frame;
+    private final By frameLocator = By.xpath("//iframe[contains(@src,'storefront/gallery')]");
+    private final By spinner = By.className("loader-circle loader-circle-small");
 
 
     public ProductListTable(WebDriver driver) {
         this.driver = driver;
+        frame = driver.findElement(frameLocator);
+        FrameUtil.swithcToFrame(driver,frame);
         PageFactory.initElements(driver, this);
-    }
-
-    private void swithcToFrame(WebDriver driver) {
-        frame = driver.findElement(By.xpath("//iframe[@id='TPASection_jh9acbfxiframe']"));
-        driver.switchTo().frame(frame);
-    }
-
-
-    private void swithcToDefaultContent(WebDriver driver) {
-       driver.switchTo().defaultContent();
+        Wait.waitFotAjaxIsFinished(driver);
+        Wait.waitUntilAnjularRequestFinished(driver);
     }
 
     public void selectItemFromGallery(String itemId) {
-
-        swithcToFrame(driver);
         WebElement product = parent.findElement(By.xpath("//img[contains(@src,'" + itemId + "')]"));
         LOGGER.info("Selecting item " + itemId + " from gallery...");
         Actions actions = new Actions(driver);
         actions.moveToElement(product);
         actions.click().build().perform();
-        swithcToDefaultContent(driver);
     }
 
     public Product getProductInfo(String itemId) {
 
-        swithcToFrame(driver);
-        List<WebElement> products = parent.findElements(By.xpath("//li[@data-hook='gallery-item']"));
-        for (WebElement product : products) {
-            WebElement prodName = product.findElement(By.xpath("//img[@class='media-item active crop']"));
-            if (prodName.getAttribute("ng-src").contains(itemId)) {
-                LOGGER.info("Getting info of  " + itemId + " from gallery...");
-                String name = product.findElement(By.xpath("//h3")).getText();
-                String price = String.valueOf(product.findElement(By.xpath("//span[@data-hook='withPrice']")).getText().
-                        replace("$", "").replaceAll(" ", ""));
-                String status = product.findElement(By.xpath("//span[@class='ribbon']")).getText();
-                swithcToDefaultContent(driver);
-                return new Product.Builder().
-                        withName(name).
-                        withPrice(price).
-                        withStatus(status).
-                        create();
-
-            }
-        }
-        swithcToDefaultContent(driver);
-        return null;
-
+        By path = By.xpath("//ancestor::div[@data-hook='image-link']");
+        WebElement product = parent.findElement(By.xpath("//img[contains(@src,'" + itemId + "')]"));
+        LOGGER.info("Getting info of  " + itemId + " from gallery...");
+        String name = product.findElement(path).findElement(By.xpath("//following::h3")).getText();
+        String price = String.valueOf(product.findElement(path).findElement(By.xpath("//following::span[@data-hook='price']")).getText().
+                replace("₴", "").replace(",", "."));
+            String status = product.findElement(path).findElement(By.xpath("/fofgvbllowing::product-ribbon")).getText();
+           return new Product.Builder().
+                withName(name).
+                withPrice(price).
+                withStatus(status).
+                create();
     }
 
     public int getNumberOfProducts() {
-        swithcToFrame(driver);
         int size = parent.findElements(By.xpath("//li[@data-hook='gallery-item']")).size();
-        swithcToDefaultContent(driver);
         return size;
 
 

@@ -20,7 +20,7 @@ public class Wait   {
                 until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    public static void waitElementIsInvisible(WebDriver driver, By locator){
+    public static void waitElementIsNotPresent(WebDriver driver, By locator){
         WebDriverWait webDriverWait = new WebDriverWait(driver, TIMEOUT);
         webDriverWait.
                 until(ExpectedConditions.invisibilityOfElementLocated(locator));
@@ -38,7 +38,7 @@ public class Wait   {
                 until(ExpectedConditions.presenceOfElementLocated(locator));
     }
 
-    /*public static void waitUntilAnjularRequestFinished(WebDriver driver) {
+    public static void waitUntilAnjularRequestFinished(WebDriver driver) {
         final String script = "var callback = arguments[arguments.length - 1];\n" +
                 "var rootSelector = \'body\';\n" +
                 "var el = document.querySelector(rootSelector);\n" +
@@ -55,11 +55,12 @@ public class Wait   {
                 "}";
 
         ((JavascriptExecutor) driver).executeAsyncScript(script, new Object[0]);
-    }*/
-
-
-    public static void waitUntilAnjularRequestFinished(WebDriver driver) {
-        NgWebDriver ngWebDriver = new NgWebDriver((JavascriptExecutor) driver);
-        ngWebDriver.waitForAngularRequestsToFinish();
     }
+
+    public static void waitFotAjaxIsFinished(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("return (typeof jQuery != 'undefined') ? jQuery.active == 0 : true;");
+
+    }
+
+
 }

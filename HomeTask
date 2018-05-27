@@ -1,0 +1,21 @@
+"Build a basic framework and create 1 test flow according to the System and Scenario elaborated below."
+
+System (AKA site url):
+https://kolesniknikolai92.wixsite.com/automation-ait/
+
+Scenario:
+1.	Go to Shop
+2.	Select product GLASSES from gallery shown
+3.	Add item to Cart
+4.	Remove item from Cart
+5.	Minimize the Cart
+6.	Add product to Cart again
+7.	Minimize the Cart
+8.	Go back to main STORES gallery
+9.	Go to Bag of Items and expect glasses items
+10.	Minimize the Cart
+11.	Select product SCARF from the gallery shown
+12.	Add item to Cart
+13.	Go to Cart View
+14.	Change quantity of glasses to 3
+15.	Remove Scarf from the Cart View

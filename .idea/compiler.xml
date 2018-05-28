@@ -10,7 +10,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="wix" target="1.5" />
       <module name="WixTask" target="1.5" />
     </bytecodeTargetLevel>
   </component>

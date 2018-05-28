@@ -49,7 +49,7 @@ public class CartProductListWidget {
         actions.moveToElement(productToremove);
         actions.click().build().perform();
         Wait.waitFotAjaxIsFinished(driver);
-        LOGGER.info("Product " + item + " should be removed");
+        LOGGER.info("Product " + item + " should be removed from cart");
         driver.switchTo().defaultContent();
     }
 

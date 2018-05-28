@@ -15,24 +15,25 @@ public class CartBagWidget {
     public static final Logger LOGGER = Logger.getLogger(CartBagWidget.class);
     @FindBy(xpath = "//a[@id='cart-widget-button']")
     private WebElement cartButton;
-    private WebElement frame;
-    String frameLocator = "//iframe[@id='comp-jh9acbuwiframe']";
+    String frameID = "comp-jh9acbuwiframe";
 
     public CartBagWidget(WebDriver driver) {
         this.driver = driver;
-        driver.switchTo().defaultContent();
-        frame = driver.findElement(By.xpath(frameLocator));
-        driver.switchTo().frame(frame);
         PageFactory.initElements(driver, this);
     }
 
-    public void openCartWidget() {
+    public void openCartFromHeaderWidget() {
+        driver.switchTo().frame(frameID);
         LOGGER.info("Opening cart widget ...");
         cartButton.click();
-        Wait.waitUntilAnjularRequestFinished(driver);
+        Wait.waitFotAjaxIsFinished(driver);
+        driver.switchTo().defaultContent();
     }
 
-    public String getNumberOfProduct () {
-       return cartButton.getText();
+    public int getNumberOfProduct () {
+        driver.switchTo().frame(frameID);
+        int number = Integer.parseInt(cartButton.getText());
+        driver.switchTo().defaultContent();
+        return number;
     }
 }

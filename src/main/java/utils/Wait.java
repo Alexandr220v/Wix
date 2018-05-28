@@ -12,7 +12,7 @@ import  com.paulhammant.*;
 
 public class Wait   {
 
-    public static final long TIMEOUT = 15;
+    public static final long TIMEOUT = 10;
 
     public static void waitElementIsVisible(WebDriver driver, By locator){
         WebDriverWait webDriverWait = new WebDriverWait(driver, TIMEOUT);

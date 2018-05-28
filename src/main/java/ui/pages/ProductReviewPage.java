@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import utils.FrameUtil;
 import utils.Wait;
 
 public class ProductReviewPage {
@@ -20,32 +19,34 @@ public class ProductReviewPage {
     @FindBy(xpath = "//li[@class='info-section active']")
     private WebElement infoSection;
     private WebElement frame;
-    private String frameLocator = "//iframe[contains(@src,'/storefront/product/i-m-a-product')]";
+    private String frameID = "TPAMultiSection_jh9acbtniframe";
 
     public ProductReviewPage(WebDriver driver) {
         this.driver = driver;
-        driver.switchTo().defaultContent();
-        frame = driver.findElement(By.xpath(frameLocator));
-        FrameUtil.swithcToIFrame(driver,frame);
         PageFactory.initElements(driver, this);
-        Wait.waitUntilAnjularRequestFinished(driver);
     }
 
     public void addItemToCart() {
+        driver.switchTo().frame(frameID);
         LOGGER.info("Adding item to the cart ...");
         addToCart.click();
         Wait.waitUntilAnjularRequestFinished(driver);
+        driver.switchTo().defaultContent();
     }
 
     public String getProductPriceFromReview() {
+        driver.switchTo().frame(frameID);
         LOGGER.info("Getting product price ...");
         String price = reviewPrice.getText().replace("₴","").replace(",",".");
+        driver.switchTo().defaultContent();
         return price;
     }
 
     public String getInfo() {
+        driver.switchTo().frame(frameID);
         LOGGER.info("getting info");
         String info = infoSection.findElement(By.xpath("/p")).getText();
+        driver.switchTo().defaultContent();
         return info;
     }
 }

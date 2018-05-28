@@ -30,7 +30,7 @@ public class HomePage {
         Wait.waitElementIsVisible(driver,By.id("comp-jhalo8eilink"));
         LOGGER.info("Clicking on shop button...");
         shop.click();
-        Wait.waitUntilAnjularRequestFinished(driver);
+        //Wait.waitUntilAnjularRequestFinished(driver);
         Wait.waitFotAjaxIsFinished(driver);
     }
 

@@ -6,11 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import utils.FrameUtil;
-import utils.Wait;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,32 +39,42 @@ public class CartPage extends PageObject {
     @FindBy(id = "total-sum")
     private WebElement totalSum;
     private WebElement frame;
-    private String frameLocator = "//iframe[@title='Cart Page']";
+    private String frameID = "TPAMultiSection_jh9acbtyiframe";
 
     public CartPage(WebDriver driver) {
         this.driver = driver;
-        driver.switchTo().defaultContent();
-        frame = driver.findElement(By.xpath(frameLocator));
-        //FrameUtil.switchToFrame(frameLocator, driver);
-        FrameUtil.swithcToIFrame( driver,frame);
         PageFactory.initElements(driver, this);
     }
 
 
     public String getProductName(String itemId) {
+        driver.switchTo().frame(frameID);
         List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']"));
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
-            if (name.getText().contains(itemId)) {
-                return name.getText().substring(name.getText().indexOf("media/"), name.getText().indexOf(".jpg"));
+            if (name.getAttribute("src").contains(itemId)) {
+                String productName = name.getText().substring(name.getText().indexOf("media/"), name.getText().indexOf(".jpg"));
+                driver.switchTo().defaultContent();
+                return productName;
 
             }
         }
+        driver.switchTo().defaultContent();
         return null;
 
     }
 
+    public boolean isProductInCart(String itemId) {
+        driver.switchTo().frame(frameID);
+        List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']//img"));
+        boolean isInCart = products.contains(itemId);
+        driver.switchTo().defaultContent();
+        return isInCart;
+
+    }
+
     public void changeNumberOfProduct(String itemId, int num) {
+        driver.switchTo().frame(frameID);
         List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']"));
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
@@ -75,52 +82,64 @@ public class CartPage extends PageObject {
                 elem.findElement(By.xpath("//input")).sendKeys(Keys.CONTROL);
                 elem.findElement(By.xpath("//input")).sendKeys(Keys.DELETE);
                 elem.findElement(By.xpath("//input")).sendKeys(String.valueOf(num));
+                driver.switchTo().defaultContent();
                 break;
             }
         }
+        driver.switchTo().defaultContent();
     }
 
     public String getTotalPriceOfProduct(String itemId) {
+        driver.switchTo().frame(frameID);
         List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']"));
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
             if (name.getAttribute("src").contains(itemId)) {
                 BigDecimal price = new BigDecimal(elem.findElement(By.xpath("//span[@data-hook='product-total-price']")).getText().
                         replace("₴", "").replace(",", "."));
-                BigDecimal quantity = new BigDecimal(elem.findElement(By.
-                        xpath("//*[@data-hook='product-quantity']//input[@type='number']")).getAttribute("value"));
-                BigDecimal total = price.multiply(quantity);
-                return String.valueOf(total);
+                driver.switchTo().defaultContent();
+                return String.valueOf(price);
             }
         }
+        driver.switchTo().defaultContent();
         return null;
     }
 
     public void removeProduct(String itemId) {
+        driver.switchTo().frame(frameID);
+        LOGGER.info("Removing product from cart ...");
         List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']"));
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
-            if (name.getText().contains(itemId)) {
+            if (name.getAttribute("src").contains(itemId)) {
                 elem.findElement(By.xpath("//button[@data-hook='remove-button']")).click();
+                LOGGER.info("Product should be removed from cart ...");
                 break;
             }
         }
+        driver.switchTo().defaultContent();
     }
 
     public String getSubTotalAmountOfProducts() {
+        driver.switchTo().frame(frameID);
         String amount = subTotalAmount.getText().replace("₴", "").replace(",", ".");
+        driver.switchTo().defaultContent();
         return amount;
 
     }
 
     public String getTotalSum() {
+        driver.switchTo().frame(frameID);
         String sum = totalSum.getText().replace("₴", "").replace(",", ".");
+        driver.switchTo().defaultContent();
         return sum;
 
     }
 
     public void pressCheckoutButton() {
+        driver.switchTo().frame(frameID);
         checkOut.click();
+        driver.switchTo().defaultContent();
 
     }
 }

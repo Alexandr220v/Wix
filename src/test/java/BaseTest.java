@@ -13,7 +13,7 @@ public class BaseTest {
 
     private final Properties config = PropertyUtils.loadProperties("config.properties");
     protected static final Logger LOGGER = Logger.getLogger(BaseTest.class);
-    private static final long PAGE_LOAD_TIMEOUT = 30;
+    private static final long PAGE_LOAD_TIMEOUT = 60;
     private static final long TIMEOUT = 20;
     protected WebDriver driver;
     public final String BASE_URL = "https://kolesniknikolai92.wixsite.com/" + "automation-ait";

@@ -28,33 +28,37 @@ public class HeaderPanelWidget {
 
     public HeaderPanelWidget(WebDriver driver) {
         this.driver= driver;
-        driver.switchTo().defaultContent();
         PageFactory.initElements(driver,this);
-        Wait.waitFotAjaxIsFinished(driver);
-        Wait.waitUntilAnjularRequestFinished(driver);
+        //Wait.waitUntilAnjularRequestFinished(driver);
     }
 
 
     public void openStore() {
+        driver.switchTo().defaultContent();
         LOGGER.info("Opening store ...");
-
         stores.click();
-        Wait.waitUntilAnjularRequestFinished(driver);
+        //Wait.waitUntilAnjularRequestFinished(driver);
+        Wait.waitFotAjaxIsFinished(driver);
     }
 
     public WebElement getHome() {
+        driver.switchTo().defaultContent();
         return home;
     }
 
     public WebElement getContractForm() {
-        return contractForm;
+
+        driver.switchTo().defaultContent();return contractForm;
     }
 
     public WebElement getLogin() {
+
+        driver.switchTo().defaultContent();
         return login;
     }
 
     public String getHeaderButtonColor(String label) {
+        driver.switchTo().defaultContent();
         List<WebElement> headers = driver.findElements(By.cssSelector(".ddm1repeaterButtonlabel"));
         for (WebElement header : headers) {
          if (header.getText().equals(label)) {

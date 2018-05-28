@@ -1,14 +1,10 @@
 package utils;
 
-import com.google.common.base.Function;
-import com.paulhammant.ngwebdriver.NgWebDriver;
-import org.junit.Assert;
-import org.omg.CORBA.TIMEOUT;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import  com.paulhammant.*;
 
 public class Wait   {
 

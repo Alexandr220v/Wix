@@ -34,10 +34,9 @@ public class HeaderPanelWidget {
 
 
     public void openStore() {
-        driver.switchTo().defaultContent();
         LOGGER.info("Opening store ...");
         stores.click();
-        //Wait.waitUntilAnjularRequestFinished(driver);
+        Wait.waitUntilAnjularRequestFinished(driver);
         Wait.waitFotAjaxIsFinished(driver);
     }
 

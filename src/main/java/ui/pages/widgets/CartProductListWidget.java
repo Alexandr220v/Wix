@@ -25,7 +25,7 @@ public class CartProductListWidget {
     private WebElement removeItem;
     @FindBy(xpath = "//div[@data-hook='cart-widget-total']")
     private WebElement subTotalAmount;
-    @FindBy(xpath = "//section[@class='cart-content']//span[@data-hook='user-free-text']")
+    @FindBy(xpath = "//user-free-text[@class='mini-cart-empty-user-text']")
     private WebElement cartEmptyMessage;
     @FindBy(xpath = "//li[@data-hook='cart-widget-item']")
     private WebElement productList;
@@ -41,13 +41,12 @@ public class CartProductListWidget {
 
     public void removeItemFromCart(String item) throws InterruptedException {
         driver.switchTo().frame(driver.findElement(By.xpath(frameLocator)));
+        Wait.waitElementIsPresent(driver, cartWidgetActive);
         LOGGER.info("Removing " + item + " from cart...");
         WebElement productToremove = cartContent.findElement(By.xpath("//li[@data-hook='cart-widget-item']" +
                 "//img[contains(@src,'" + item + "')]" +
                 "/ancestor::li[@data-hook='cart-widget-item']//button"));
-        Actions actions = new Actions(driver);
-        actions.moveToElement(productToremove);
-        actions.click().build().perform();
+        productToremove.click();
         Wait.waitFotAjaxIsFinished(driver);
         LOGGER.info("Product " + item + " should be removed from cart");
         driver.switchTo().defaultContent();
@@ -58,8 +57,8 @@ public class CartProductListWidget {
         LOGGER.info("Minimizing cart...");
         Wait.waitElementIsPresent(driver, cartWidgetActive);
         closeCart.click();
+        Wait.waitUntilAnjularRequestFinished(driver);
         Wait.waitFotAjaxIsFinished(driver);
-        Wait.waitElementIsNotPresent(driver, cartWidgetActive);
         driver.switchTo().defaultContent();
     }
 
@@ -96,9 +95,17 @@ public class CartProductListWidget {
 
     public String getEmptyMessage() {
         driver.switchTo().frame(driver.findElement(By.xpath(frameLocator)));
-        String message = cartEmptyMessage.getText();
-        driver.switchTo().defaultContent();
-        return message;
+        String message;
+        try {
+
+            message = cartEmptyMessage.getText();
+            return message;
+        } catch (Exception e) {
+            LOGGER.info("Seems product has not been removed from cart...");
+        } finally {
+            driver.switchTo().defaultContent();
+        }
+        return null;
     }
 
 }

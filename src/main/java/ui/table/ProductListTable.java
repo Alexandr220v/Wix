@@ -16,10 +16,7 @@ public class ProductListTable {
     public static final Logger LOGGER = Logger.getLogger(ProductListTable.class);
     @FindBy(xpath = "//div[@class='gallery']")
     private WebElement parent;
-    private WebElement frame;
     private final String frameID = "TPASection_jh9acbfxiframe";
-    private final By spinner = By.className("loader-circle loader-circle-small");
-
 
     public ProductListTable(WebDriver driver) {
         this.driver = driver;
@@ -39,7 +36,6 @@ public class ProductListTable {
 
     public Product getProductInfo(String itemId) {
         driver.switchTo().frame(frameID);
-        By path = By.xpath("//ancestor::div[@data-hook='image-link']");
         LOGGER.info("Getting name of  " + itemId + " from gallery...");
         String name = parent.findElement(By.xpath("//img[contains(@src,'" + itemId + "')]" +
                 "//ancestor::div[@data-hook='image-link']" +

@@ -6,8 +6,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Wait;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -79,9 +83,12 @@ public class CartPage extends PageObject {
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
             if (name.getAttribute("src").contains(itemId)) {
-                elem.findElement(By.xpath("//input")).sendKeys(Keys.CONTROL);
-                elem.findElement(By.xpath("//input")).sendKeys(Keys.DELETE);
-                elem.findElement(By.xpath("//input")).sendKeys(String.valueOf(num));
+                WebElement input = elem.findElement(By.xpath("//input"));
+                input.sendKeys(Keys.CONTROL);
+                input.sendKeys(Keys.DELETE);
+                input.sendKeys(String.valueOf(num));
+                input.sendKeys(Keys.TAB);
+                Wait.waitFotAjaxIsFinished(driver);
                 driver.switchTo().defaultContent();
                 break;
             }
@@ -95,7 +102,9 @@ public class CartPage extends PageObject {
         for (WebElement elem : products) {
             WebElement name = elem.findElement(By.xpath("//img"));
             if (name.getAttribute("src").contains(itemId)) {
-                BigDecimal price = new BigDecimal(elem.findElement(By.xpath("//span[@data-hook='product-total-price']")).getText().
+                By subtotalValueLocator = By.xpath("//span[@data-hook='product-total-price']");
+                WebElement priceField = elem.findElement(subtotalValueLocator);
+                BigDecimal price = new BigDecimal(priceField.getText().
                         replace("₴", "").replace(",", "."));
                 driver.switchTo().defaultContent();
                 return String.valueOf(price);
@@ -108,15 +117,12 @@ public class CartPage extends PageObject {
     public void removeProduct(String itemId) {
         driver.switchTo().frame(frameID);
         LOGGER.info("Removing product from cart ...");
-        List<WebElement> products = productListSection.findElements(By.xpath("//section[@data-hook='item']"));
-        for (WebElement elem : products) {
-            WebElement name = elem.findElement(By.xpath("//img"));
-            if (name.getAttribute("src").contains(itemId)) {
-                elem.findElement(By.xpath("//button[@data-hook='remove-button']")).click();
-                LOGGER.info("Product should be removed from cart ...");
-                break;
-            }
-        }
+        WebElement productToremove = productListSection.findElement(By.xpath("//section[@data-hook='item']" +
+                "//img[contains(@src,'" + itemId + "')]" +
+                "//ancestor::section[@data-hook='item']" +
+                "//button"));
+        productToremove.click();
+        LOGGER.info("Product should be removed from cart ...");
         driver.switchTo().defaultContent();
     }
 

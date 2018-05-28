@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import utils.Wait;
+
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +16,8 @@ public class BaseTest {
     private static final long PAGE_LOAD_TIMEOUT = 60;
     private static final long TIMEOUT = 20;
     protected WebDriver driver;
-    public final String BASE_URL = "https://kolesniknikolai92.wixsite.com/" + "automation-ait";
+    public final String BASE_URL = config.getProperty("url") + "/automation-ait";
+
     @BeforeMethod(alwaysRun = true)
     public void setDriver() throws Exception {
         try {

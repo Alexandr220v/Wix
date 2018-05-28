@@ -30,40 +30,40 @@ public class CheckoutSmokeTest extends BaseTest {
         ProductReviewPage reviewPage = new ProductReviewPage(driver);
         reviewPage.addItemToCart();
         CartProductListWidget cartProductListWidget = new CartProductListWidget(driver);
+        Assert.assertTrue(cartProductListWidget.isProductPageDisabled());
         cartProductListWidget.removeItemFromCart(glassesId);
-        Assert.assertEquals(cartProductListWidget.getEmptyMessage(),"Cart is empty");
+        Assert.assertEquals(cartProductListWidget.getEmptyMessage(),"Cart is empty","Message is not shown");
         Assert.assertTrue(cartProductListWidget.isProductPageDisabled());
 
         cartProductListWidget.minimizeCart();
         CartBagWidget cartBagWidget = new CartBagWidget(driver);
-        Assert.assertEquals(cartBagWidget.getNumberOfProduct(),0);
+        Assert.assertEquals(cartBagWidget.getNumberOfProduct(),0,"Number of products are incorrect ");
 
         reviewPage.addItemToCart();
+        Assert.assertEquals(cartBagWidget.getNumberOfProduct(),1,"Number of products are incorrect ");
         cartProductListWidget.minimizeCart();
-        Assert.assertEquals(cartBagWidget.getNumberOfProduct(),1);
-        HeaderPanelWidget basePage = new HeaderPanelWidget(driver);
-        basePage.openStore();
+        header.openStore();
         cartBagWidget.openCartFromHeaderWidget();
         Assert.assertTrue(cartProductListWidget.isProductPageDisabled());
-        Assert.assertEquals(cartProductListWidget.getSubTotalPrice(),"20.00");
+        Assert.assertEquals(cartProductListWidget.getSubTotalPrice(),"20.00","Subtotal price is different");
 
         cartProductListWidget.minimizeCart();
         productList.selectItemFromGallery(scarfId);
         reviewPage.addItemToCart();
-        Assert.assertEquals(cartBagWidget.getNumberOfProduct(), 2);
+        Assert.assertEquals(cartBagWidget.getNumberOfProduct(), 2,"Number of products are incorrect ");
         Assert.assertTrue(cartProductListWidget.isProductPageDisabled());
-        Assert.assertEquals(cartProductListWidget.getSubTotalPrice(), "60.00");
+        Assert.assertEquals(cartProductListWidget.getSubTotalPrice(), "60.00","Subtotal price is different");
         Assert.assertTrue(cartProductListWidget.isProductPageDisabled());
 
         cartProductListWidget.openViewCart();
         CartPage cartPage = new CartPage(driver);
         cartPage.changeNumberOfProduct(glassesId, quantity);
-        Assert.assertEquals(cartPage.getTotalPriceOfProduct(glassesId), "60.00");
-        Assert.assertEquals(cartPage.getSubTotalAmountOfProducts(), "100.00");
+        Assert.assertEquals(cartPage.getTotalPriceOfProduct(glassesId),"60.00","Total price is different");
+        Assert.assertEquals(cartPage.getSubTotalAmountOfProducts(), "100.00","Subtotal price is different");
 
         cartPage.removeProduct(scarfId);
         Assert.assertFalse(cartPage.isProductInCart(scarfId));
-        Assert.assertEquals(cartPage.getSubTotalAmountOfProducts(), "100.00");
+        Assert.assertEquals(cartPage.getSubTotalAmountOfProducts(), "60.00","Subtotal price is different");
 
 
     }

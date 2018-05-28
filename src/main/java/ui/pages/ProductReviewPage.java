@@ -18,7 +18,7 @@ public class ProductReviewPage {
     private WebElement reviewPrice;
     @FindBy(xpath = "//li[@class='info-section active']")
     private WebElement infoSection;
-    private WebElement frame;
+    private By cartWidgetActive = By.xpath("//div[@class='minicart active']");
     private String frameID = "TPAMultiSection_jh9acbtniframe";
 
     public ProductReviewPage(WebDriver driver) {
@@ -31,6 +31,7 @@ public class ProductReviewPage {
         LOGGER.info("Adding item to the cart ...");
         addToCart.click();
         Wait.waitUntilAnjularRequestFinished(driver);
+        Wait.waitFotAjaxIsFinished(driver);
         driver.switchTo().defaultContent();
     }
 

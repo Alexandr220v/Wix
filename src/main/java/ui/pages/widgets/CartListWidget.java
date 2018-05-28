@@ -28,6 +28,9 @@ public class CartListWidget {
     private WebElement subTotalAmount;
     @FindBy(xpath = "//section[@class='cart-content']//span[@data-hook='user-free-text']")
     private WebElement cartEmptyMessage;
+    @FindBy(xpath = "//li[@data-hook='cart-widget-item']")
+    private WebElement productList;
+
     private WebElement frame;
     private String frameLocator = "//iframe[contains(@src,'https://ecom.wix.com/storefront/cartwidgetPopup')]";
 
@@ -54,19 +57,37 @@ public class CartListWidget {
         }
     }
 
-    public void minimizeCart()  {
+    public void minimizeCart() {
         LOGGER.info("Minimizing cart...");
-        try {
+
             closeCart.click();
-        }catch (NoSuchElementException e) {
-            closeCart.click();
-        }
         Wait.waitUntilAnjularRequestFinished(driver);
     }
 
     public void openViewCart() {
         LOGGER.info("View cart opening...");
         viewCart.click();
-        Wait.waitUntilAnjularRequestFinished(driver);
+       Wait.waitFotAjaxIsFinished(driver);
     }
+
+    public String getSubTotalPrice() {
+        String price = subTotalAmount.getText().replace("₴", "").replace(",", ".");
+        return price;
+    }
+
+    public boolean isProductInCartList(String itemId) {
+        List<WebElement> products = productList.findElements(By.xpath("//img"));
+        return products.contains(itemId);
+    }
+
+    public boolean isProductPageDisabled() {
+        WebElement backDrop = driver.findElement(By.xpath("//div[@data-hook='cart-widget-backdrop']"));
+        return backDrop.isDisplayed();
+    }
+
+    public String getEmptyMessage() {
+
+        return cartEmptyMessage.getText();
+    }
+
 }

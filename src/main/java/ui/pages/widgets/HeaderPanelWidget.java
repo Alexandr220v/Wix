@@ -28,6 +28,7 @@ public class HeaderPanelWidget {
 
     public HeaderPanelWidget(WebDriver driver) {
         this.driver= driver;
+        driver.switchTo().defaultContent();
         PageFactory.initElements(driver,this);
         Wait.waitFotAjaxIsFinished(driver);
         Wait.waitUntilAnjularRequestFinished(driver);
@@ -36,6 +37,7 @@ public class HeaderPanelWidget {
 
     public void openStore() {
         LOGGER.info("Opening store ...");
+
         stores.click();
         Wait.waitUntilAnjularRequestFinished(driver);
     }
@@ -52,7 +54,7 @@ public class HeaderPanelWidget {
         return login;
     }
 
-    public String geHeaderButtonColor(String label) {
+    public String getHeaderButtonColor(String label) {
         List<WebElement> headers = driver.findElements(By.cssSelector(".ddm1repeaterButtonlabel"));
         for (WebElement header : headers) {
          if (header.getText().equals(label)) {
@@ -61,4 +63,5 @@ public class HeaderPanelWidget {
         }
         return null;
     }
+
 }

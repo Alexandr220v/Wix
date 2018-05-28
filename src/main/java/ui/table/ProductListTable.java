@@ -26,19 +26,18 @@ public class ProductListTable {
 
     public ProductListTable(WebDriver driver) {
         this.driver = driver;
+        driver.switchTo().defaultContent();
         frame = driver.findElement(frameLocator);
-        FrameUtil.swithcToFrame(driver,frame);
+        FrameUtil.swithcToIFrame(driver, frame);
         PageFactory.initElements(driver, this);
-        Wait.waitFotAjaxIsFinished(driver);
-        Wait.waitUntilAnjularRequestFinished(driver);
     }
 
     public void selectItemFromGallery(String itemId) {
         WebElement product = parent.findElement(By.xpath("//img[contains(@src,'" + itemId + "')]"));
         LOGGER.info("Selecting item " + itemId + " from gallery...");
         Actions actions = new Actions(driver);
-        actions.moveToElement(product);
-        actions.click().build().perform();
+        actions.moveToElement(product).click().build().perform();
+
     }
 
     public Product getProductInfo(String itemId) {
@@ -47,10 +46,11 @@ public class ProductListTable {
         WebElement product = parent.findElement(By.xpath("//img[contains(@src,'" + itemId + "')]"));
         LOGGER.info("Getting info of  " + itemId + " from gallery...");
         String name = product.findElement(path).findElement(By.xpath("//following::h3")).getText();
-        String price = String.valueOf(product.findElement(path).findElement(By.xpath("//following::span[@data-hook='price']")).getText().
+        String price = String.valueOf(product.findElement(path).findElement(By.
+                xpath("//following::span[@data-hook='price']")).getText().
                 replace("₴", "").replace(",", "."));
-            String status = product.findElement(path).findElement(By.xpath("/fofgvbllowing::product-ribbon")).getText();
-           return new Product.Builder().
+        String status = product.findElement(path).findElement(By.xpath("/following::product-ribbon")).getText();
+        return new Product.Builder().
                 withName(name).
                 withPrice(price).
                 withStatus(status).

@@ -25,7 +25,7 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void goToShop() {
+    public void clickShop() {
         LOGGER.info("Waiting until page home page is loading...");
         Wait.waitElementIsVisible(driver,By.id("comp-jhalo8eilink"));
         LOGGER.info("Clicking on shop button...");

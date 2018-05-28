@@ -31,4 +31,8 @@ public class CartBagWidget {
         cartButton.click();
         Wait.waitUntilAnjularRequestFinished(driver);
     }
+
+    public String getNumberOfProduct () {
+       return cartButton.getText();
+    }
 }

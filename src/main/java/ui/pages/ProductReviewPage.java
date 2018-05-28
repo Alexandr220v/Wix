@@ -15,6 +15,10 @@ public class ProductReviewPage {
     public static final Logger LOGGER = Logger.getLogger(ProductReviewPage.class);
     @FindBy(xpath = "//*[@data-hook='add-to-cart']")
     private WebElement addToCart;
+    @FindBy(xpath = "//span[@data-hook='product-price']")
+    private WebElement reviewPrice;
+    @FindBy(xpath = "//li[@class='info-section active']")
+    private WebElement infoSection;
     private WebElement frame;
     private String frameLocator = "//iframe[contains(@src,'/storefront/product/i-m-a-product')]";
 
@@ -22,7 +26,7 @@ public class ProductReviewPage {
         this.driver = driver;
         driver.switchTo().defaultContent();
         frame = driver.findElement(By.xpath(frameLocator));
-        FrameUtil.swithcToFrame(driver,frame);
+        FrameUtil.swithcToIFrame(driver,frame);
         PageFactory.initElements(driver, this);
         Wait.waitUntilAnjularRequestFinished(driver);
     }
@@ -31,5 +35,17 @@ public class ProductReviewPage {
         LOGGER.info("Adding item to the cart ...");
         addToCart.click();
         Wait.waitUntilAnjularRequestFinished(driver);
+    }
+
+    public String getProductPriceFromReview() {
+        LOGGER.info("Getting product price ...");
+        String price = reviewPrice.getText().replace("₴","").replace(",",".");
+        return price;
+    }
+
+    public String getInfo() {
+        LOGGER.info("getting info");
+        String info = infoSection.findElement(By.xpath("/p")).getText();
+        return info;
     }
 }
